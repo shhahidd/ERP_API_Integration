@@ -1,3 +1,4 @@
+from app.transform import transform_record
 from fastapi import FastAPI
 import json
 from pathlib import Path
@@ -20,6 +21,16 @@ def health():
     }
 
 @app.get("/sap/journal-entries")
+@app.get("/analytics/journal-entries")
+def analytics_entries():
+    file_path = Path(__file__).parent / "sample_data.json"
+
+    with open(file_path, "r") as file:
+        data = json.load(file)
+
+    transformed = [transform_record(record) for record in data]
+
+    return transformed
 def get_journal_entries():
     file_path = Path(__file__).parent / "sample_data.json"
 
