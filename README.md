@@ -230,7 +230,7 @@ GET /health
 
 ### Get All Entries
 
-![Get All](screenshots/03-get-all.png)
+![Get All](screenshots/03-get-all-entries.png)
 
 ### Analytics
 
