@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: SAP S/4HANA Journal Entry Extraction OData API (Mock)
+  description: |
+    OData service for extracting financial journal entries from SAP S/4HANA (Universal Journal - ACDOCA).
+    This interface supports Operational Data Provisioning (ODP) delta tracking and Core Data Services (CDS) view exposure.
+  version: 1.0.0
+servers:
+  - url: https://sap-gateway.meridian.in/sap/opu/odata/sap/API_JOURNALENTRY_SRV
+    description: Internal SAP Gateway server for Meridian Manufacturing Ltd.
+paths:
+  /A_JournalEntry:
+    get:
+      summary: Retrieve Journal Entry Headers (ACDOCA)
+      description: |
+        Retrieves journal entry header records. Supports OData query parameters like `$filter`, `$select`, `$top`, and `$skip`.
+        Also supports incremental delta extraction via the standard SAP `Delta-Token` custom header.
+      parameters:
+        - name: $filter
+          in: query
+          description: Filter criteria (e.g., CompanyCode eq 'MC01' and PostingDate ge '2026-04-01')
+          required: false
+          schema:
+            type: string
+        - name: $select
+          in: query
+          description: Select fields to retrieve (e.g., CompanyCode,AccountingDocument,FiscalYear,PostingDate)
+          required: false
+          schema:
+            type: string
+        - name: $top
+          in: query
+          description: Number of records to return (paging)
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: $skip
+          in: query
+          description: Number of records to skip (paging)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: Delta-Token
+          in: header
+          description: Token used for Operational Data Provisioning (ODP) delta updates.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful extraction of journal entry headers.
+          headers:
+            Delta-Token:
+              schema:
+                type: string
+              description: New delta token for subsequent updates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  d:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/JournalEntryHeader'
+        '400':
+          description: Bad OData Query syntax
+        '401':
+          description: Unauthorized
+        '429':
+          description: Concurrent RFC pool connection limit exceeded
+        '500':
+          description: Database or gateway error
+
+  /A_JournalEntryItem:
+    get:
+      summary: Retrieve Journal Entry Line Items (Universal Journal Details)
+      description: Retrieves line items (ACDOCA records) containing financial accounts, amounts, cost centers, and tax details.
+      parameters:
+        - name: $filter
+          in: query
+          description: Filter criteria (e.g., GLAccount eq '400100')
+          required: false
+          schema:
+            type: string
+        - name: $top
+          in: query
+          schema:
+            type: integer
+            default: 500
+        - name: $skip
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful extraction of journal entry items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  d:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/JournalEntryItem'
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    JournalEntryHeader:
+      type: object
+      required:
+        - CompanyCode
+        - AccountingDocument
+        - FiscalYear
+        - PostingDate
+      properties:
+        CompanyCode:
+          type: string
+          example: "MC01"
+          description: Legal entity (BUKRS)
+        AccountingDocument:
+          type: string
+          example: "100000234"
+          description: Unique document number (BELNR)
+        FiscalYear:
+          type: string
+          example: "2026"
+          description: Posting fiscal year (GJAHR)
+        DocumentType:
+          type: string
+          example: "SA"
+          description: Journal voucher document type (BLART)
+        PostingDate:
+          type: string
+          format: date
+          example: "2026-06-27"
+          description: Posting date in the ledger (BUDAT)
+        CreatedByUser:
+          type: string
+          example: "SPATEL"
+          description: User who posted the entry
+
+    JournalEntryItem:
+      type: object
+      required:
+        - CompanyCode
+        - AccountingDocument
+        - LedgerGLLineItem
+        - GLAccount
+        - AmountInTransactionCurrency
+        - TransactionCurrency
+      properties:
+        CompanyCode:
+          type: string
+          example: "MC01"
+        AccountingDocument:
+          type: string
+          example: "100000234"
+        LedgerGLLineItem:
+          type: string
+          example: "001"
+          description: Line item position (BUZEI)
+        GLAccount:
+          type: string
+          example: "400100"
+          description: GL Account number (HKONT)
+        AmountInTransactionCurrency:
+          type: number
+          format: float
+          example: 1250.00
+          description: Item value (WRBTR)
+        TransactionCurrency:
+          type: string
+          example: "INR"
+          description: Currency code (WAERS)
+        CostCenter:
+          type: string
+          example: "CC_PUNE_10"
+          description: Cost center identifier (KOSTL)
+        ProfitCenter:
+          type: string
+          example: "PC_ENG_01"
+          description: Profit center identifier (PRCTR)
+        TaxCode:
+          type: string
+          example: "S1"
+          description: GST Tax classification code
+        CGST_Amount:
+          type: number
+          format: float
+          example: 112.50
+        SGST_Amount:
+          type: number
+          format: float
+          example: 112.50
+        IGST_Amount:
+          type: number
+          format: float
+          example: 0.00

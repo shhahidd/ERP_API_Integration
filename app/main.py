@@ -17,7 +17,8 @@ from app.models import (
     JournalEntryResponse,
     MessageResponse,
     SummaryResponse,
-    CompanySummaryResponse
+    CompanySummaryResponse,
+    CreateJournalResponse
 )
 
 from app.database import (
@@ -80,14 +81,18 @@ def analytics_summary():
 def company_summary():
     return get_company_summary()
 
-@app.get("/sap/journal-entries/search")
+@app.get(
+    "/sap/journal-entries/search",
+    response_model=list[JournalEntryResponse]
+)
 def search_journal_entries(q: str):
     return search_entries(q)
 
 #CREATE
 @app.post(
     "/sap/journal-entries",
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    response_model=CreateJournalResponse
 )
 def create_journal_entry(entry: JournalEntry):
 
@@ -109,10 +114,6 @@ def create_journal_entry(entry: JournalEntry):
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Document ID '{entry.document_id}' already exists."
         )
-    
-    class CreateJournalResponse(BaseModel):
-        message: str
-        data: JournalEntryResponse
 
 #READ
 @app.get(

@@ -1,0 +1,420 @@
+openapi: 3.0.3
+info:
+  title: Zetheta FinSight Integration API
+  description: |
+    RESTful integration gateway connecting SAP S/4HANA financial documents with the FinSight financial analytics platform.
+    Provides endpoints for CRUD operations, search, advanced filtering, business summary analytics, and CSV exports.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local Integration Server
+paths:
+  /:
+    get:
+      summary: Root welcome message
+      description: Verifies that the API service is running.
+      responses:
+        '200':
+          description: Service running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "ERP API Integration is running successfully!"
+
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Reports application health and database connection status.
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  database:
+                    type: string
+                    example: "connected"
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /sap/journal-entries:
+    post:
+      summary: Create journal entry
+      description: Receives a new journal entry payload, validates it, and saves it in the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntry'
+      responses:
+        '201':
+          description: Saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateJournalResponse'
+        '409':
+          description: Duplicate Document ID conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+
+    get:
+      summary: Get all journal entries
+      description: Retrieves a list of journal entries, with support for filtering, sorting, and pagination.
+      parameters:
+        - name: company_code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: currency
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: account
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            default: "document_id"
+        - name: order
+          in: query
+          schema:
+            type: string
+            default: "asc"
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of journal entries retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JournalEntryResponse'
+
+  /sap/journal-entries/{document_id}:
+    get:
+      summary: Get journal entry by ID
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Found journal entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalEntryResponse'
+        '404':
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    put:
+      summary: Update journal entry
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntry'
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateJournalResponse'
+        '404':
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+    delete:
+      summary: Delete journal entry
+      parameters:
+        - name: document_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "JE1001 deleted successfully."
+        '404':
+          description: Entry not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+
+  /sap/journal-entries/search:
+    get:
+      summary: Search journal entries
+      description: Returns matching records using a text search query parameter across multiple fields.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Matching records retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JournalEntryResponse'
+
+  /analytics/summary:
+    get:
+      summary: Overall analytics summary
+      description: Returns consolidated totals, averages, and bounds of transaction amounts.
+      responses:
+        '200':
+          description: Summary retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummaryResponse'
+
+  /analytics/company-summary:
+    get:
+      summary: Company-wise analytics summary
+      description: Returns a breakdown of transactions and total amount per company code.
+      responses:
+        '200':
+          description: Company summary retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanySummaryResponse'
+
+  /export/csv:
+    get:
+      summary: Export entries to CSV
+      description: Downloads the full set of ledger journal entries as a CSV sheet.
+      responses:
+        '200':
+          description: CSV file generated
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    JournalEntry:
+      type: object
+      required:
+        - document_id
+        - company_code
+        - account
+        - amount
+        - currency
+        - posting_date
+      properties:
+        document_id:
+          type: string
+          example: "JE1001"
+        company_code:
+          type: string
+          example: "MC01"
+        account:
+          type: string
+          example: "400100"
+        amount:
+          type: number
+          format: float
+          example: 1250.00
+        currency:
+          type: string
+          example: "INR"
+        posting_date:
+          type: string
+          format: date
+          example: "2026-06-01"
+
+    JournalEntryResponse:
+      type: object
+      required:
+        - document_id
+        - company_code
+        - account
+        - amount
+        - currency
+        - posting_date
+      properties:
+        document_id:
+          type: string
+          example: "JE1001"
+        company_code:
+          type: string
+          example: "MC01"
+        account:
+          type: string
+          example: "400100"
+        amount:
+          type: number
+          format: float
+          example: 1250.00
+        currency:
+          type: string
+          example: "INR"
+        posting_date:
+          type: string
+          format: date
+          example: "2026-06-01"
+
+    CreateJournalResponse:
+      type: object
+      required:
+        - message
+        - data
+      properties:
+        message:
+          type: string
+          example: "Journal entry saved successfully!"
+        data:
+          $ref: '#/components/schemas/JournalEntryResponse'
+
+    SummaryResponse:
+      type: object
+      required:
+        - total_entries
+      properties:
+        total_entries:
+          type: integer
+          example: 250
+        total_amount:
+          type: number
+          format: float
+          example: 312500.00
+        average_amount:
+          type: number
+          format: float
+          example: 1250.00
+        highest_amount:
+          type: number
+          format: float
+          example: 50000.00
+        lowest_amount:
+          type: number
+          format: float
+          example: 100.00
+
+    CompanySummaryResponse:
+      type: object
+      required:
+        - company_code
+        - entries
+        - total_amount
+      properties:
+        company_code:
+          type: string
+          example: "MC01"
+        entries:
+          type: integer
+          example: 150
+        total_amount:
+          type: number
+          format: float
+          example: 187500.00
+
+    HTTPError:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+          example: "Journal entry 'JE1001' not found."
+
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            type: object
+            properties:
+              loc:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              type:
+                type: string
