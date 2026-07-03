@@ -80,8 +80,6 @@ def analytics_summary():
 def company_summary():
     return get_company_summary()
 
-@app.get("/sap/journal-entries/{document_id}")
-
 @app.get("/sap/journal-entries/search")
 def search_journal_entries(q: str):
     return search_entries(q)

@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="AeZr_cSIyssmHYqdSP2e">
+    <mxGraphModel dx="1136" dy="589" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DLidBgSnQIqu42AEMRUj-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Client&lt;br&gt;(Browser / Swagger UI)" vertex="1">
+          <mxGeometry height="60" width="140" x="350" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-18" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="DLidBgSnQIqu42AEMRUj-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Logger&lt;div&gt;logger.py&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="355" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-17" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="DLidBgSnQIqu42AEMRUj-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Pydantic&amp;nbsp;&lt;div&gt;Validation&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="90" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-23" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CSV Export" vertex="1">
+          <mxGeometry height="60" width="130" x="610" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&amp;nbsp; Analytics&amp;nbsp;" vertex="1">
+          <mxGeometry height="60" width="130" x="355" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-15" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;" target="DLidBgSnQIqu42AEMRUj-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Middleware&lt;div&gt;Request Time&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="650" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-20" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="DLidBgSnQIqu42AEMRUj-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Database Layer&lt;div&gt;database.py&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="355" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-22" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="DLidBgSnQIqu42AEMRUj-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&amp;nbsp;SQLite DB&lt;div&gt;erp.db&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="355" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-14" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414.79999999999995" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="FastAPI Application&amp;nbsp;&lt;div&gt;(main.py)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="130" x="350" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-13" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.542;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="DLidBgSnQIqu42AEMRUj-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-16" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.464;entryY=0.021;entryDx=0;entryDy=0;entryPerimeter=0;" target="DLidBgSnQIqu42AEMRUj-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-24" edge="1" parent="1" source="DLidBgSnQIqu42AEMRUj-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DLidBgSnQIqu42AEMRUj-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CRUD API&quot;S" vertex="1">
+          <mxGeometry height="60" width="130" x="70" y="840" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

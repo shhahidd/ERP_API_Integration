@@ -217,6 +217,33 @@ Endpoint:
 GET /health
 ```
 
+
+## Screenshots
+
+### Swagger UI
+
+![Swagger](screenshots/01-swagger-home.png)
+
+### Create Journal Entry
+
+![Create](screenshots/02-create-entry.png)
+
+### Get All Entries
+
+![Get All](screenshots/03-get-all.png)
+
+### Analytics
+
+![Analytics](screenshots/06-analytics-summary.png)
+
+### CSV Export
+
+![CSV](screenshots/08-csv-export.png)
+
+### Logs
+
+![Logs](screenshots/10-logs.png)
+
 ---
 
 ## Future Improvements
