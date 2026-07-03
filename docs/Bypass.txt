@@ -1,8 +1,0 @@
-.\venv\Scripts\Activate.ps1
-
-IF BLOCKED BY POWERSHELL
-
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-Server Start
-python -m uvicorn app.main:app --reload
